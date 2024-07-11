@@ -54,12 +54,12 @@ const average = (arr) =>
 const KEY = "752ba37e";
 
 export default function App() {
-  const [query, setQuery] = useState("inception");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedId, setSelectedId] = useState("tt1375666");
+  const [selectedId, setSelectedId] = useState("");
 
   // useEffect(function () {
   //   console.log("After initial render");
@@ -117,7 +117,7 @@ export default function App() {
           setError("");
         } catch (err) {
           setIsLoading(false);
-          console.error(err.message);
+          console.log(err.message);
 
           if (err.name !== "AbortError") setError(err.message);
         } finally {
@@ -130,6 +130,8 @@ export default function App() {
         setError("");
         return;
       }
+
+      handleCloseMovie();
 
       fetchMovies();
 
@@ -334,6 +336,23 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
 
   useEffect(
     function () {
