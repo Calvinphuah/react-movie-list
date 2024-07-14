@@ -37,6 +37,7 @@ export default function App() {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
+  // Using useEffect will ensure that local storage is in sync
   useEffect(
     function () {
       localStorage.setItem("watched", JSON.stringify(watched));
